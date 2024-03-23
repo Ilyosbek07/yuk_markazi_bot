@@ -1,0 +1,5 @@
+# venv/bin/pip install aiogram==2.22.2 environs==10.0.0 asyncpg==0.29.0 openpyxl==3.1.2
+aiogram==2.22.2
+openpyxl==3.1.2
+environs==10.0.0
+asyncpg==0.29.0
