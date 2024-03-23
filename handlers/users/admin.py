@@ -12,7 +12,7 @@ from states.rekStates import RekData
 @dp.callback_query_handler(text="confirm")
 async def confirm_order(call: types.CallbackQuery):
     id = call.message.text.split('#')
-    await db.confirm_order_status(id[0])
+    await db.confirm_order_status(int(id[0]))
     await call.message.delete_reply_markup()
     await call.message.reply('✅ Tasdiqlangan')
 
@@ -20,7 +20,7 @@ async def confirm_order(call: types.CallbackQuery):
 @dp.callback_query_handler(text="cancel")
 async def cancel_order(call: types.CallbackQuery):
     id = call.message.text.split('#')
-    await db.cancel_order_status(id[0])
+    await db.cancel_order_status(int(id[0]))
     await call.message.delete_reply_markup()
     await call.message.reply('🛑 Bekor qilingan')
 

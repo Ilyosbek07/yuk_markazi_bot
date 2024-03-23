@@ -1,4 +1,5 @@
 from . import (
+    drop_tables,
     start,
     add_list_button,
     admin2,
@@ -7,7 +8,6 @@ from . import (
     get_args_user,
     excel,
     admin,
-    drop_tables,
     help,
     json_file_commands,
     quesions_create,

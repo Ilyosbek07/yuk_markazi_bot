@@ -525,7 +525,10 @@ async def order(message: types.Message):
 
 @dp.message_handler(state=TrackState.region)
 async def region(message: types.Message, state: FSMContext):
-    if message.text:
+    if message.text and message.text == "🛑 Bekor qilish":
+        await message.answer("Bosh Menu", reply_markup=menu)
+        await state.finish()
+    elif message.text:
         id = 0
         if message.text == 'Andijon':
             id += 1
@@ -576,7 +579,10 @@ async def region(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=TrackState.district)
 async def district(message: types.Message, state: FSMContext):
-    if message.text:
+    if message.text and message.text == "🛑 Bekor qilish":
+        await message.answer("Bosh Menu", reply_markup=menu)
+        await state.finish()
+    elif message.text:
         await state.update_data(
             {
                 'from_district': message.text
@@ -599,7 +605,10 @@ async def district(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=TrackState.to_region)
 async def to_region(message: types.Message, state: FSMContext):
-    if message.text:
+    if message.text and message.text == "🛑 Bekor qilish":
+        await message.answer("Bosh Menu", reply_markup=menu)
+        await state.finish()
+    elif message.text:
         id = 0
         if message.text == 'Andijon':
             id += 1
@@ -649,7 +658,10 @@ async def to_region(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=TrackState.to_district)
 async def to_district(message: types.Message, state: FSMContext):
-    if message.text:
+    if message.text and message.text == "🛑 Bekor qilish":
+        await message.answer("Bosh Menu", reply_markup=menu)
+        await state.finish()
+    elif message.text:
         but = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, )
         but.add((KeyboardButton(text='🛑 Bekor qilish')))
 
@@ -667,7 +679,10 @@ async def to_district(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=TrackState.data)
 async def result(message: types.Message, state: FSMContext):
-    if message.text:
+    if message.text and message.text == "🛑 Bekor qilish":
+        await message.answer("Bosh Menu", reply_markup=menu)
+        await state.finish()
+    elif message.text:
         await state.update_data({
             'description': message.text
         })
@@ -702,11 +717,15 @@ async def status(message: types.Message, state: FSMContext):
             customer_id=message.from_user.id
         )
         group_id = await db.get_elements()
-        order_detail = (f"<b>ID: {order['id']}#,\n🗒 Yangi Buyurtma keldi.\n\n"
+        user = await db.get_user(telegram_id=message.from_user.id)
+        order_detail = (f"<b>{order['id']}# - ID\n🗒 Yangi Buyurtma keldi.\n\n"
                         f"Ma'lumotlar:\n\n{data.get('from_region')} {data.get('from_district')}dan {data.get('to_region')} {data.get('to_district')}ga yetkazib berish kerak!!!\n\n"
                         f"Buyurtma haqida ma'lumot:\n"
                         f"{data.get('description')}</b>\n\n"
-                        f"Buyurtmachi - ")
+                        f"Buyurtmachining ma'lumotlari:\n\n"
+                        f"👤 Ismi: {user[0][1]}\n"
+                        f"📞 Raqami: {user[0][3]}\n"
+                        f"Username: @{user[0][2]}\n\n")
         await bot.send_message(chat_id=group_id[0][-1], text=order_detail, reply_markup=order_button)
         await message.answer("Buyurtmangiz qabul qilindi!!!\n\n"
                              "Adminlar siz bilan tez orada bog'lanishadi!!!", reply_markup=menu)
@@ -763,18 +782,24 @@ async def get_order_group(message: types.Message, state: FSMContext):
 async def filling_property_answer(call: types.CallbackQuery):
     await call.message.delete()
     elements = await db.get_elements()
-    await call.message.answer(elements[0][2])
+    bot_username = (await bot.get_me()).username
+
+    await call.message.answer(f"{elements[0][2]}"
+                              f"\n\nhttps://t.me/{bot_username}?start={call.from_user.id}")
 
 
 @dp.callback_query_handler(text="earn_money")
 async def earn_money_answer(call: types.CallbackQuery):
     await call.message.delete()
     elements = await db.get_elements()
-    await call.message.answer(elements[0][3])
+    bot_username = (await bot.get_me()).username
+
+    await call.message.answer(f"{elements[0][3]}"
+                              f"\n\nhttps://t.me/{bot_username}?start={call.from_user.id}")
 
 
 @dp.callback_query_handler(text="check_subs")
-async def checker(call: types.CallbackQuery, state: FSMContext):
+async def checker(call: types.CallbackQuery):
     requested_user_is_subscribe = await db.get_requested_users(telegram_id=call.from_user.id)
     channels = await db.select_req_j_chanel()
     if requested_user_is_subscribe:

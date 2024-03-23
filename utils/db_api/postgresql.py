@@ -138,7 +138,7 @@ class Database:
         gifts TEXT NULL,
         game_text TEXT NULL,
         shartlar TEXT NULL,
-        limit_score INT DEFAULT 5,
+        limit_score INT DEFAULT 1,
         winners INT DEFAULT 20,
         group_id TEXT NULL
                 );
