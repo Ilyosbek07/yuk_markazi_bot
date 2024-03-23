@@ -27,9 +27,9 @@ async def profile(message: types.Message):
     get_data = await db.get_user(telegram_id=message.from_user.id)
     user_data = get_data[0]
     await message.answer(f"""
-    Mablag'ingiz : {user_data[1]}\n\nRaqamingiz : {user_data[3]}\nTaklif qilgan do'stlaringiz soni: {user_data[4]}\n
+    Ismingiz : {user_data[1]}\n\nRaqamingiz : {user_data[3]}\nTaklif qilgan do'stlaringiz soni: {user_data[4]}\n
 ----------------------------
-Маблағингиз : {user_data[1]}\nРақамингиз : {user_data[3]}\nТаклиф қилган дўстларингиз coни: {user_data[4]}
+Исмингиз : {user_data[1]}\nРақамингиз : {user_data[3]}\nТаклиф қилган дўстларингиз coни: {user_data[4]}
     """, reply_markup=private_button)
 
 
